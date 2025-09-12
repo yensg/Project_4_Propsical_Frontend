@@ -1,7 +1,9 @@
 const useFetch = () => {
   try {
     const fetchData = async (endpoint, method, body, token) => {
-      const res = await fetch(import.meta.env.VITE_SERVER + endpoint, {
+      const uri = import.meta.env.VITE_SERVER + endpoint;
+
+      const res = await fetch(uri, {
         method,
         headers: {
           "Content-Type": "application/json",
@@ -9,26 +11,26 @@ const useFetch = () => {
         },
         body: JSON.stringify(body),
       });
+
       const data = await res.json();
 
       if (!res.ok) {
-        if (Array.isArray(data.msg)) {
-          const returnValue = data.msg.map((item, idx) => (
-            <p key={idx}>{item.msg}</p>
-          ));
-
-          return { ok: false, msg: returnValue };
+        if (data?.errors) {
+          const errorMsgArray = data.msg.map((error) => error.msg);
+          const errorMsgs = errorMsgArray.join(", ");
+          throw data.errors[0].msg;
+        } else if (data.status === "error") {
+          throw data.msg;
         } else {
-          return { ok: false, msg: data.msg };
+          throw "an unknown error has occurred, please try again later";
         }
-      } else {
-        return { ok: true, data };
       }
+
+      return data;
     };
 
     return fetchData;
   } catch (err) {
-    console.error(err.message);
     return { ok: false, msg: "data error" };
   }
 };

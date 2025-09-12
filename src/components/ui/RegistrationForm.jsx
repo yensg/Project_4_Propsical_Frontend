@@ -1,0 +1,140 @@
+import React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+// import { toast } from "sonner";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+
+import {
+  Form,
+  FormControl,
+  //   FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import useFetch from "../../hooks/useFetch";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+
+const FormSchema = z.object({
+  username: z.string().min(5, {
+    message: "Username must be at least 5 characters.",
+  }),
+  password: z.string().min(5, {
+    message: "Password must be at least 5 characters.",
+  }),
+});
+
+const RegistrationForm = () => {
+  const navigate = useNavigate();
+  const fetchData = useFetch();
+
+  const form = useForm({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    // toast("You submitted the following values", {
+    //   description: (
+    //     <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
+    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+    //     </pre>
+    //   ),
+    // });
+    // try {
+    //   const res = await fetchData(
+    //     "/api/register",
+    //     "POST",
+    //     {
+    //       username: data.username,
+    //       password: data.password,
+    //       role: "registered",
+    //       subscription_plan: "basic",
+    //       name: "testing",
+    //       email: "testing",
+    //     },
+    //     undefined
+    //   );
+
+    //   if (!res.ok) {
+    //     throw new Error("something went wrong");
+    //   }
+    //   const query = await res.json();
+    //   return query;
+    // } catch (error) {
+    //   console.error(error.message);
+    // }
+
+    await fetchData(
+      "/auth/register",
+      "POST",
+      {
+        username: data.username,
+        password: data.password,
+        role: "registered",
+        subscription_plan: "basic",
+      },
+      undefined
+    );
+    return true;
+  };
+  const mutate = useMutation({
+    mutationFn: (data) => {
+      console.log(data);
+      onSubmit(data);
+      navigate("/login");
+    },
+  });
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((data) => {
+          mutate.mutate(data); // pass the form values to your mutation
+        })}
+        className="w-2/3 space-y-6"
+      >
+        {/* <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6"> */}
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="username" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input placeholder="password" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
+};
+
+export default RegistrationForm;
