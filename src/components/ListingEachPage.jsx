@@ -19,7 +19,7 @@ const ListingEachPage = () => {
   const getOneListing = async () => {
     return await fetchData(
       "/api/eachListing",
-      "PUT",
+      "POST",
       {
         listing_id: params.id,
       },
@@ -33,14 +33,13 @@ const ListingEachPage = () => {
 
   return (
     <>
-      <>
+      <div>
         <h1 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
           <div className="relative flex items-center justify-center gap-2 -left-4">
             <Popsicle className="w-6 h-6" />
             Propsical
           </div>
         </h1>
-
         {query.isSuccess && (
           <>
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
@@ -127,7 +126,7 @@ const ListingEachPage = () => {
             </div>
           </>
         )}
-      </>
+      </div>
     </>
   );
 };

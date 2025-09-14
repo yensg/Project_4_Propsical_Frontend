@@ -22,6 +22,7 @@ const ListingEach = (props) => {
   const authCtx = use(AuthCtx);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const isAuthenticated = Boolean(authCtx.access);
 
   const deleteListing = async () => {
     await fetchData(
@@ -43,6 +44,21 @@ const ListingEach = (props) => {
 
   const clickedView = () => {
     navigate(`/listings/${props.listing_id}`);
+  };
+
+  const clickedUpdate = () => {
+    navigate(`/updateListing/${props.listing_id}`);
+  };
+
+  const findImages = async () => {
+    return await fetchData(
+      "/api/findImages",
+      "POST",
+      {
+        listing_id: props.listing_id,
+      },
+      undefined
+    );
   };
 
   return (
@@ -93,24 +109,28 @@ const ListingEach = (props) => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
-              <Button variant="outline" onClick={clickedView}>
-                <Eye />
-                View
-              </Button>
-              <Button variant="outline">
-                <PencilLine />
-                Update
-              </Button>
-              <Button variant="secondary">
-                <ArchiveX />
-                Completed
-              </Button>
-              <Button variant="destructive" onClick={mutate.mutate}>
-                <Trash2 />
-                Delete
-              </Button>
-            </div>
+            {isAuthenticated ? (
+              <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
+                <Button variant="outline" onClick={clickedView}>
+                  <Eye />
+                  View
+                </Button>
+                <Button variant="outline" onClick={clickedUpdate}>
+                  <PencilLine />
+                  Update
+                </Button>
+                <Button variant="secondary">
+                  <ArchiveX />
+                  Completed
+                </Button>
+                <Button variant="destructive" onClick={mutate.mutate}>
+                  <Trash2 />
+                  Delete
+                </Button>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </Card>
       </div>

@@ -3,52 +3,27 @@ import React, { use, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import AuthCtx from "../context/authCtx";
 import ListingEach from "./ListingEach";
-import { CirclePlus, FilePlus, Popsicle } from "lucide-react";
+import { Popsicle } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 
-const ListingSummary = () => {
-  const authCtx = use(AuthCtx);
+const ListingPublicPage = () => {
   const fetchData = useFetch();
 
   const getAllListings = async () => {
-    return await fetchData(
-      "/api/listings",
-      "PUT",
-      { username: authCtx.username },
-      authCtx.access
-    );
+    return await fetchData("/api/allListings", "GET", undefined, undefined);
   };
   const query = useQuery({
-    queryKey: ["listings", authCtx.username],
+    queryKey: ["allListings"],
     queryFn: getAllListings,
   });
-
-  const getAccountId = async () => {
-    return await fetchData(
-      "/api/username",
-      "PUT",
-      {
-        username: authCtx.username,
-      },
-      authCtx.access
-    );
-  };
-  const queryAccountId = useQuery({
-    queryKey: ["accountId"],
-    queryFn: getAccountId,
-  });
-
-  useEffect(() => {
-    queryAccountId.isSuccess && authCtx.setAccount_id(queryAccountId.data.id);
-  }, [queryAccountId.isSuccess, queryAccountId.data]);
 
   return (
     <>
       <h1 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
         <div className="flex items-center justify-center gap-2">
           <Popsicle />
-          Dashboard
+          Welcome!
         </div>
       </h1>
 
@@ -79,14 +54,8 @@ const ListingSummary = () => {
             </ListingEach>
           );
         })}
-
-      <Link to={`/newListing/`}>
-        <Button className="fixed bottom-16 right-4 z-50">
-          <CirclePlus /> New Listing
-        </Button>
-      </Link>
     </>
   );
 };
 
-export default ListingSummary;
+export default ListingPublicPage;

@@ -57,12 +57,6 @@ export function CardDemo() {
     retry: false,
   });
 
-  useEffect(() => {
-    console.log(authCtx.access);
-    console.log(authCtx.role);
-    console.log(authCtx.username);
-  }, [authCtx.access, authCtx.role, authCtx.username]);
-
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="flex flex-col items-center gap-2 text-center">
