@@ -108,10 +108,10 @@ const ListingEachCreate = () => {
 
     const payload = {
       ...inputs,
-      land_size: inputs.land_size === "" ? null : Number(inputs.land_size),
+      land_size: inputs.land_size === "" ? null : inputs.land_size,
       account_id: authCtx.account_id, // add it here only when sending
     };
-
+    console.log(authCtx.account_id);
     mutate.mutate(payload);
   };
 
@@ -126,13 +126,7 @@ const ListingEachCreate = () => {
       <div className="scroll-m-20 text-xl font-semibold tracking-tight">
         Create New Listing
       </div>
-      <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
-        <Link to={`/listings`}>
-          <Button>
-            <ArrowBigLeft /> Back
-          </Button>
-        </Link>
-      </div>
+
       {error && <p className="text-red-500 font-semibold">{error}</p>}
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2">
@@ -331,6 +325,14 @@ const ListingEachCreate = () => {
             Clear
           </Button>
         </div>
+      </div>
+      <br />
+      <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
+        <Link to={`/listings`}>
+          <Button>
+            <ArrowBigLeft /> Back
+          </Button>
+        </Link>
       </div>
     </>
   );

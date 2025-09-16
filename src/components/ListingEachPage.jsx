@@ -1,8 +1,8 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
-import { Popsicle } from "lucide-react";
+import { ArrowBigLeft, Phone, Popsicle, User } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -11,10 +11,12 @@ import {
   CarouselPrevious,
 } from "./ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "./ui/button";
 
 const ListingEachPage = () => {
   const params = useParams();
   const fetchData = useFetch();
+  const navigate = useNavigate();
 
   const getOneListing = async () => {
     return await fetchData(
@@ -31,6 +33,42 @@ const ListingEachPage = () => {
     queryFn: getOneListing,
   });
 
+  const findImages = async () => {
+    const res = await fetch(`${import.meta.env.VITE_SERVER}/api/findImages`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: "Bearer " + undefined,
+      },
+      body: JSON.stringify({ listing_id: params.id }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Can't find images");
+    return data;
+  };
+  const queryImages = useQuery({
+    queryKey: ["images", params.id],
+    queryFn: findImages,
+  });
+
+  const findUsername = async () => {
+    const res = await fetch(`${import.meta.env.VITE_SERVER}/api/username`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: "Bearer " + undefined,
+      },
+      body: JSON.stringify({ listing_id: params.id }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Can't find images");
+    return data;
+  };
+  const queryUsername = useQuery({
+    queryKey: ["usernames", params.id],
+    queryFn: findUsername,
+  });
+
   return (
     <>
       <div>
@@ -40,6 +78,18 @@ const ListingEachPage = () => {
             Propsical
           </div>
         </h1>
+        {queryUsername.isSuccess && (
+          <>
+            <h3 className="flex flex-row items-center justify-center text-2xl font-semibold tracking-tight">
+              <User />
+              {queryUsername.data.username}{" "}
+            </h3>
+            <h3 className="flex flex-row items-center justify-center text-2xl font-semibold tracking-tight">
+              <Phone />
+              {queryUsername.data.phone}
+            </h3>
+          </>
+        )}
         {query.isSuccess && (
           <>
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
@@ -51,21 +101,23 @@ const ListingEachPage = () => {
             <p className="text-muted-foreground text-xl">
               {query.data.description}
             </p>
-            <Carousel className="w-full max-w-xs mx-auto">
+            <Carousel className="w-full max-w-xs mx-auto rounded-xl ">
               <CarouselContent>
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <CarouselItem key={index}>
-                    <div className="p-1">
-                      <Card>
-                        <CardContent className="flex aspect-square items-center justify-center p-6">
-                          <span className="text-4xl font-semibold">
-                            {index + 1}
-                          </span>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </CarouselItem>
-                ))}
+                {queryImages.isSuccess &&
+                  queryImages.data.map((image, index) => (
+                    <CarouselItem
+                      key={index}
+                      className="w-full h-auto object-cover rounded-xl"
+                    >
+                      <div className="p-1 ">
+                        <img
+                          src={image.image}
+                          alt={index}
+                          className="w-full h-auto object-cover rounded-xl"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
               </CarouselContent>
               <CarouselPrevious />
               <CarouselNext />
@@ -127,6 +179,9 @@ const ListingEachPage = () => {
           </>
         )}
       </div>
+      <Button onClick={() => navigate(-1)}>
+        <ArrowBigLeft /> Back
+      </Button>
     </>
   );
 };

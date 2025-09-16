@@ -27,7 +27,7 @@ const ListingSummary = () => {
   const getAccountId = async () => {
     return await fetchData(
       "/api/username",
-      "PUT",
+      "POST",
       {
         username: authCtx.username,
       },
@@ -53,6 +53,7 @@ const ListingSummary = () => {
       </h1>
 
       {query?.isSuccess &&
+        queryAccountId.isSuccess &&
         query?.data?.map((item, idx) => {
           return (
             <ListingEach
@@ -72,8 +73,8 @@ const ListingSummary = () => {
               account_id={item.account_id}
               is_deleted={item.is_deleted}
               key={idx}
-              number={item.number}
               tenure={item.tenure}
+              //   username={item.username}
             >
               {idx}
             </ListingEach>

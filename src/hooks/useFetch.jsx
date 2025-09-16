@@ -15,12 +15,8 @@ const useFetch = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        if (data?.errors) {
-          const errorMsgArray = data.msg.map((error) => error.msg);
-          const errorMsgs = errorMsgArray.join(", ");
-          throw data.errors[0].msg;
-        } else if (data.status === "error") {
-          throw data.msg;
+        if (data?.status) {
+          throw data.status;
         } else {
           throw "an unknown error has occurred, please try again later";
         }

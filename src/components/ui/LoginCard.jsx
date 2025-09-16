@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popsicle } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { use, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthCtx from "../../context/authCtx";
 import useFetch from "../../hooks/useFetch";
@@ -109,9 +109,9 @@ export function CardDemo() {
           Login
         </Button>
         <div className="flex w-full gap-4">
-          <Button variant="outline" className="flex-1">
+          {/* <Button variant="outline" className="flex-1">
             Login with Google
-          </Button>
+          </Button> */}
           <Button
             variant="outline"
             className="flex-1"

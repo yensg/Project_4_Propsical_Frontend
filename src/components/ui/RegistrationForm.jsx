@@ -27,6 +27,12 @@ const FormSchema = z.object({
   password: z.string().min(5, {
     message: "Password must be at least 5 characters.",
   }),
+  name: z.string().min(1, {
+    message: "name is required.",
+  }),
+  phone: z.string().min(8, {
+    message: "Phone number is required.",
+  }),
 });
 
 const RegistrationForm = () => {
@@ -38,6 +44,8 @@ const RegistrationForm = () => {
     defaultValues: {
       username: "",
       password: "",
+      name: "",
+      phone: "",
     },
   });
 
@@ -80,6 +88,8 @@ const RegistrationForm = () => {
       {
         username: data.username,
         password: data.password,
+        name: data.name,
+        phone: data.phone,
         role: "registered",
         subscription_plan: "basic",
       },
@@ -89,12 +99,12 @@ const RegistrationForm = () => {
   };
   const mutate = useMutation({
     mutationFn: (data) => {
-      console.log(data);
+      //   console.log(data);
       onSubmit(data);
       navigate("/login");
     },
   });
-
+  // how this ...form, ...field works? what this actually contains
   return (
     <Form {...form}>
       <form
@@ -125,6 +135,34 @@ const RegistrationForm = () => {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input placeholder="password" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="name" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone</FormLabel>
+              <FormControl>
+                <Input placeholder="Phone number" {...field} />
               </FormControl>
 
               <FormMessage />

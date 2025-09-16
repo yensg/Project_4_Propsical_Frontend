@@ -87,6 +87,10 @@ const ListingEachUpdate = () => {
 
   const mutate = useMutation({
     mutationFn: (payload) => updateListing(payload),
+    onError: (error) => {
+      console.error("Validation error:", error);
+      //   alert(JSON.stringify(error)); // 👈 quick way to see messages
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(["listing", params.id]);
       // this will auto refresh the form due to tanstack and useState
@@ -115,22 +119,18 @@ const ListingEachUpdate = () => {
 
   return (
     <>
+      {JSON.stringify(mutate.data)}
       <h1 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
         <div className="relative flex items-center justify-center gap-2 -left-4">
           <Popsicle className="w-6 h-6" />
           Propsical
         </div>
       </h1>
+      {query.isSuccess && query.error}
       <div className="scroll-m-20 text-xl font-semibold tracking-tight">
         Update Listing
       </div>
-      <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
-        <Link to={`/listings`}>
-          <Button>
-            <ArrowBigLeft /> Back
-          </Button>
-        </Link>
-      </div>
+
       {error && <p className="text-red-500 font-semibold">{error}</p>}
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2">
@@ -334,6 +334,14 @@ const ListingEachUpdate = () => {
             Clear
           </Button>
         </div>
+      </div>
+      <br />
+      <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
+        <Link to={`/listings`}>
+          <Button>
+            <ArrowBigLeft /> Back
+          </Button>
+        </Link>
       </div>
     </>
   );

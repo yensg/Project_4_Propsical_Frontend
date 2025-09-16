@@ -4,13 +4,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AuthCtx from "./context/authCtx";
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { Link, Route, Routes } from "react-router-dom";
 import Calendar from "./components/Calendar";
@@ -18,21 +14,13 @@ import ListingSummary from "./components/ListingSummary";
 import LoginPage from "./components/LoginPage";
 import RegistrationPage from "./components/RegistrationPage";
 import LogoutPage from "./components/LogoutPage";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ListingEachPage from "./components/ListingEachPage";
 import ListingEachCreate from "./components/ListingEachCreate";
 import ListingEachUpload from "./components/ListingEachUpload";
 import ListingEachUpdate from "./components/ListingEachUpdate";
 import ListingPublicPage from "./components/ListingPublicPage";
-import {
-  CalendarDays,
-  House,
-  LayoutList,
-  LogIn,
-  LogOut,
-  ScanFace,
-} from "lucide-react";
+import { CalendarDays, House, LayoutList, LogIn, LogOut } from "lucide-react";
 
 const queryClient = new QueryClient();
 

@@ -11,6 +11,7 @@ const LogoutPage = () => {
     authCtx.setAccess("");
     authCtx.setRole("");
     authCtx.setUsername("");
+    authCtx.setAccount_id("");
     navigate("/login");
     // to empty all states and contexts for next user
     window.location.reload(true);

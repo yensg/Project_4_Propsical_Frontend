@@ -1,22 +1,27 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export default function Calendar20() {
-  const [date, setDate] = React.useState(new Date(2025, 5, 12))
-  const [selectedTime, setSelectedTime] = React.useState("10:00")
+  const [date, setDate] = React.useState(new Date(2025, 5, 12));
+  const [selectedTime, setSelectedTime] = React.useState("10:00");
   const timeSlots = Array.from({ length: 37 }, (_, i) => {
-    const totalMinutes = i * 15
-    const hour = Math.floor(totalMinutes / 60) + 9
-    const minute = totalMinutes % 60
-    return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-  })
+    const totalMinutes = i * 15;
+    const hour = Math.floor(totalMinutes / 60) + 9;
+    const minute = totalMinutes % 60;
+    return `${hour.toString().padStart(2, "0")}:${minute
+      .toString()
+      .padStart(2, "0")}`;
+  });
 
-  const bookedDates = Array.from({ length: 3 }, (_, i) => new Date(2025, 5, 17 + i))
+  const bookedDates = Array.from(
+    { length: 3 },
+    (_, i) => new Date(2025, 5, 17 + i)
+  );
 
   return (
     <Card className="gap-0 p-0">
@@ -40,17 +45,18 @@ export default function Calendar20() {
               formatWeekdayName: (date) => {
                 return date.toLocaleString("en-US", { weekday: "short" });
               },
-            }} />
+            }}
+          />
         </div>
-        <div
-          className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6 md:absolute md:max-h-none md:w-48 md:border-t-0 md:border-l">
+        <div className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6 md:absolute md:max-h-none md:w-48 md:border-t-0 md:border-l">
           <div className="grid gap-2">
             {timeSlots.map((time) => (
               <Button
                 key={time}
                 variant={selectedTime === time ? "default" : "outline"}
                 onClick={() => setSelectedTime(time)}
-                className="w-full shadow-none">
+                className="w-full shadow-none"
+              >
                 {time}
               </Button>
             ))}
@@ -79,7 +85,8 @@ export default function Calendar20() {
         <Button
           disabled={!date || !selectedTime}
           className="w-full md:ml-auto md:w-auto"
-          variant="outline">
+          variant="outline"
+        >
           Continue
         </Button>
       </CardFooter>
