@@ -30,7 +30,6 @@ const ListingEachUpload = () => {
     if (!res.ok) throw new Error(data.msg || "Upload failed");
     return data;
   };
-
   const mutate = useMutation({
     mutationFn: onUpload,
     onSuccess: () => {
@@ -67,7 +66,6 @@ const ListingEachUpload = () => {
       body: JSON.stringify({ public_id: public_id }),
     });
   };
-
   const mutateDelete = useMutation({
     mutationFn: (public_id) => deleteImages(public_id),
     onSuccess: () => {
@@ -88,7 +86,6 @@ const ListingEachUpload = () => {
       </div>
       <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
         <Link to={`/updateListing/${params.id}`}>
-          {/* <Button onClick={clickedBack}> */}
           <Button>
             <ArrowBigLeft /> Back
           </Button>
@@ -111,13 +108,6 @@ const ListingEachUpload = () => {
 
         {/* Show uploaded image */}
         {mutate.isPending && <Loader className="h-5 w-5 animate-spin" />}
-        {/* {mutate.isSuccess && (
-          <img
-            src={mutate.data.secure_url}
-            alt="Uploaded"
-            className="mt-2 w-48 h-48 object-cover rounded-md"
-          />
-        )} */}
 
         {queryImages.isSuccess &&
           queryImages.data.map((image, idx) => {

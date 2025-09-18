@@ -98,8 +98,8 @@ const ListingEach = (props) => {
       <div className="px-4 md:px-12 gap-2">
         <Card className="w-full p-4">
           {!isAuthenticated ? (
-            <div className="flex w-full flex-col md:flex-row items-start gap-2">
-              <div className="flex flex-col md:flex-row md: items-center items-left gap-2">
+            <div className="flex w-full flex-col md:flex-row items-start gap-2 md:justify-between">
+              <div className="flex flex-col md:flex-row md:items-center gap-2">
                 <div className="shrink-0 w-10 text-center text-lg font-semibold">
                   <span>{props.children + 1}</span>
                 </div>
@@ -181,8 +181,8 @@ const ListingEach = (props) => {
             </div>
           ) : (
             <div>
-              <div className="flex w-full flex-col md:flex-row items-start gap-2">
-                <div className="flex flex-col md:flex-row md: items-center items-left gap-2">
+              <div className="flex w-full flex-col md:flex-row items-start gap-2 md:justify-between">
+                <div className="flex flex-col md:flex-row md:items-center gap-2">
                   <div className="shrink-0 w-10 text-center text-lg font-semibold">
                     <span>{props.children + 1}</span>
                   </div>

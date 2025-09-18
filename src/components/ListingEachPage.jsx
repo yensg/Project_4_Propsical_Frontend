@@ -10,7 +10,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "./ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "./ui/button";
 
 const ListingEachPage = () => {

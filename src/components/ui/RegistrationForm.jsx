@@ -1,15 +1,11 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import { toast } from "sonner";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
-
 import {
   Form,
   FormControl,
-  //   FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -38,7 +34,6 @@ const FormSchema = z.object({
 const RegistrationForm = () => {
   const navigate = useNavigate();
   const fetchData = useFetch();
-
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -49,39 +44,7 @@ const RegistrationForm = () => {
     },
   });
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    // toast("You submitted the following values", {
-    //   description: (
-    //     <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
-    // try {
-    //   const res = await fetchData(
-    //     "/api/register",
-    //     "POST",
-    //     {
-    //       username: data.username,
-    //       password: data.password,
-    //       role: "registered",
-    //       subscription_plan: "basic",
-    //       name: "testing",
-    //       email: "testing",
-    //     },
-    //     undefined
-    //   );
-
-    //   if (!res.ok) {
-    //     throw new Error("something went wrong");
-    //   }
-    //   const query = await res.json();
-    //   return query;
-    // } catch (error) {
-    //   console.error(error.message);
-    // }
-
+  const clickedSubmit = async (data) => {
     await fetchData(
       "/auth/register",
       "POST",
@@ -99,11 +62,11 @@ const RegistrationForm = () => {
   };
   const mutate = useMutation({
     mutationFn: (data) => {
-      //   console.log(data);
-      onSubmit(data);
+      clickedSubmit(data);
       navigate("/login");
     },
   });
+
   // how this ...form, ...field works? what this actually contains
   return (
     <Form {...form}>
@@ -113,7 +76,6 @@ const RegistrationForm = () => {
         })}
         className="w-2/3 space-y-6"
       >
-        {/* <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6"> */}
         <FormField
           control={form.control}
           name="username"

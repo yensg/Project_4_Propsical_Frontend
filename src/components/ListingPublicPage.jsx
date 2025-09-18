@@ -1,11 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { use, useEffect } from "react";
+import React from "react";
 import useFetch from "../hooks/useFetch";
-import AuthCtx from "../context/authCtx";
 import ListingEach from "./ListingEach";
 import { Popsicle } from "lucide-react";
-import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
 
 const ListingPublicPage = () => {
   const fetchData = useFetch();

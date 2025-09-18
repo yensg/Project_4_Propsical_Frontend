@@ -56,6 +56,7 @@ const ListingEachUpdate = () => {
     queryFn: getOneListing,
   });
 
+  // Auto fill in with existing details based on database
   useEffect(() => {
     if (query.isSuccess && query.data) {
       const { is_deleted, geo_lat, geo_lon, account_id, ...cleaned } =
@@ -65,7 +66,7 @@ const ListingEachUpdate = () => {
     }
   }, [query.isSuccess, query.data]);
 
-  const handleClear = () => {
+  const clickedClear = () => {
     setInputs(originalInputs);
   };
 
@@ -83,29 +84,24 @@ const ListingEachUpdate = () => {
       authCtx.access
     );
   };
-
   const mutate = useMutation({
     mutationFn: (payload) => updateListing(payload),
     onError: (error) => {
       console.error("Validation error:", error);
-      //   alert(JSON.stringify(error)); // 👈 quick way to see messages
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["listing", params.id]);
       // this will auto refresh the form due to tanstack and useState
     },
   });
-
   const clickedUpdate = () => {
     const hasEmpty = Object.entries(inputs).some(
       ([key, value]) => value === "" || value === null || value === undefined
     );
-
     if (hasEmpty) {
       setError("⚠️ Please fill in all required fields");
       return;
     }
-
     setError("");
 
     const payload = {
@@ -118,7 +114,6 @@ const ListingEachUpdate = () => {
 
   return (
     <>
-      {JSON.stringify(mutate.data)}
       <h1 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
         <div className="relative flex items-center justify-center gap-2 -left-4">
           <Popsicle className="w-6 h-6" />
@@ -328,7 +323,7 @@ const ListingEachUpdate = () => {
               <Image /> Upload
             </Button>
           </Link>
-          <Button variant="destructive" onClick={handleClear}>
+          <Button variant="destructive" onClick={clickedClear}>
             <Trash2 />
             Clear
           </Button>

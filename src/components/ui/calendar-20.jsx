@@ -14,13 +14,16 @@ export default function Calendar20(props) {
   const fetchData = useFetch();
   const authCtx = use(AuthCtx);
   const queryClient = useQueryClient();
+
   const [guestName, setGuestName] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
   const [error, setError] = useState("");
+
   const isAuthenticated = Boolean(authCtx.access);
+
   const [range, setRange] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("10:00");
+  const [selectedTime, setSelectedTime] = useState("09:00");
   const timeSlots = Array.from({ length: 37 }, (_, i) => {
     const totalMinutes = i * 15;
     const hour = (Math.floor(totalMinutes / 60) + 9) % 24;
@@ -85,14 +88,16 @@ export default function Calendar20(props) {
     queryFn: fetchAllAppointments,
   });
 
+  // Blocked Dates, keep only date_is_blocked = true
   const fetchedBlockedDates = query.data
-    ?.filter((each) => each.date_is_blocked) // keep only date_is_blocked = true
+    ?.filter((each) => each.date_is_blocked)
     .map((each) => {
       return new Date(each.dtstart);
     });
 
+  // Blocked Timeslots, keep only timeslot_is_blocked = true
   const fetchedBlockedTime = query.data
-    ?.filter((each) => each.timeslot_is_blocked) // keep only is_block = true
+    ?.filter((each) => each.timeslot_is_blocked)
     .map((each) => {
       const date = new Date(each.dtstart);
       // Extract the time part (HH:mm, Singapore TZ)
@@ -121,35 +126,33 @@ export default function Calendar20(props) {
   const localMinutes = String(Math.abs(offsetMinutes) % 60).padStart(2, "0");
   // This is Time Zone due to localmachine setting
   const offset = `${sign}${localHours}:${localMinutes}`;
-
   // this is from selectedTime
   const [hours, minutes] = selectedTime.split(":").map(Number);
-
   // Extract year, month, day from selectedDate
   const year = selectedDate.getFullYear();
   const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
   const day = String(selectedDate.getDate()).padStart(2, "0");
-
-  // Combine into one ISO string
+  // Combine into one ISO string before updating the database
   const formatedDate = `${year}-${month}-${day}T${String(hours).padStart(
     2,
     "0"
   )}:${String(minutes).padStart(2, "0")}:00${offset}`;
 
-  const createAppointment = async () => {
-    return await fetchData("/api/calendar", "POST", {
-      listing_id: props.listing_id,
-      dtstart: formatedDate,
-      summary: authCtx.username || guestName,
-      description: guestPhone,
-      status: "CONFIRMED",
-      timeslot_is_blocked: true,
-      account_id: authCtx.account_id || null,
-      timezone: timeZone,
-    });
+  const createAppointment = async (data) => {
+    return await fetchData("/api/calendar", "POST", data, undefined);
+    // return await fetchData("/api/calendar", "POST", {
+    //   listing_id: props.listing_id,
+    //   dtstart: formatedDate,
+    //   summary: authCtx.username || guestName,
+    //   description: guestPhone,
+    //   status: "CONFIRMED",
+    //   timeslot_is_blocked: true,
+    //   account_id: authCtx.account_id || null,
+    //   timezone: timeZone,
+    // });
   };
   const mutateAppt = useMutation({
-    mutationFn: createAppointment,
+    mutationFn: (data) => createAppointment(data),
     onSuccess: () => {
       queryClient.invalidateQueries(["allAppointments", props.listing_id]);
       setSelectedDate(new Date());
@@ -159,7 +162,20 @@ export default function Calendar20(props) {
     },
   });
 
-  const clickedBookAppointment = () => {
+  const clickedBlockedTimeslot = () => {
+    mutateAppt.mutate({
+      listing_id: props.listing_id,
+      dtstart: formatedDate,
+      summary: authCtx.username,
+      description: "Blocked timeslot",
+      status: "CANCELLED",
+      timeslot_is_blocked: true,
+      account_id: authCtx.account_id,
+      timezone: timeZone,
+    });
+  };
+
+  const clickedBookAppointmentByPublicPage = () => {
     const inputs = { guestName, guestPhone };
     const hasEmpty = Object.entries(inputs).some(
       ([, value]) => value === "" || value === null || value === undefined
@@ -170,17 +186,35 @@ export default function Calendar20(props) {
     }
     setError("");
 
-    mutateAppt.mutate();
+    mutateAppt.mutate({
+      listing_id: props.listing_id,
+      dtstart: formatedDate,
+      summary: guestName,
+      description: guestPhone,
+      status: "CONFIRMED",
+      timeslot_is_blocked: true,
+      account_id: null,
+      timezone: timeZone,
+    });
   };
 
-  const clickedBookAppointment2 = () => {
+  const clickedBookAppointmentByLogin = () => {
     if (!guestPhone || guestPhone.trim() === "") {
       setError("⚠️ Please fill in all required fields");
       return;
     }
     setError("");
 
-    mutateAppt.mutate();
+    mutateAppt.mutate({
+      listing_id: props.listing_id,
+      dtstart: formatedDate,
+      summary: authCtx.username,
+      description: `created appt for ${guestPhone}`,
+      status: "CONFIRMED",
+      timeslot_is_blocked: true,
+      account_id: authCtx.account_id,
+      timezone: timeZone,
+    });
   };
 
   return (
@@ -210,23 +244,6 @@ export default function Calendar20(props) {
                         });
                       },
                     }}
-                    // components={{
-                    //   DayButton: ({ children, modifiers, day, ...props }) => {
-                    //     return (
-                    //       <CalendarDayButton
-                    //         day={day}
-                    //         modifiers={modifiers}
-                    //         {...props}
-                    //       >
-                    //         {children}
-
-                    //         {!modifiers.outside && (
-                    //           <span>{isWeekend ? "$220" : "$100"}</span>
-                    //         )}
-                    //       </CalendarDayButton>
-                    //     );
-                    //   },
-                    // }}
                   />
                 </div>
               </CardContent>
@@ -272,6 +289,7 @@ export default function Calendar20(props) {
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
+                    required
                     defaultMonth={selectedDate}
                     disabled={fetchedBlockedDates}
                     showOutsideDays={true}
@@ -281,6 +299,33 @@ export default function Calendar20(props) {
                         return date.toLocaleString("en-US", {
                           weekday: "short",
                         });
+                      },
+                    }}
+                    components={{
+                      DayButton: ({ children, modifiers, day, ...props }) => {
+                        const isConfirmed =
+                          query.isSuccess &&
+                          query.data.some(
+                            (each) =>
+                              each.status === "CONFIRMED" &&
+                              new Date(each.dtstart).toDateString() ===
+                                day.date.toDateString()
+                          );
+
+                        return (
+                          <CalendarDayButton
+                            day={day}
+                            modifiers={modifiers}
+                            {...props}
+                            className={
+                              isConfirmed
+                                ? "bg-red-500 text-white rounded-full"
+                                : ""
+                            }
+                          >
+                            {children}
+                          </CalendarDayButton>
+                        );
                       },
                     }}
                   />
@@ -317,6 +362,19 @@ export default function Calendar20(props) {
                   </div>
                 </div>
               </CardContent>
+              <CardFooter className="flex flex-col gap-4 border-t px-6 !py-5 md:flex-row">
+                <div className="text-sm">
+                  <>Select timeslot you want to block.</>
+                </div>
+                <Button
+                  // disabled={!selectedDate || !selectedTime}
+                  className="w-full md:ml-auto md:w-auto"
+                  variant="outline"
+                  onClick={clickedBlockedTimeslot}
+                >
+                  Block
+                </Button>
+              </CardFooter>
               <CardFooter className="flex flex-col gap-4 border-t px-6 !py-5">
                 {error && <p className="text-red-500 font-semibold">{error}</p>}
                 <div className="text-sm">Time Zone: {timeZone}</div>
@@ -352,7 +410,7 @@ export default function Calendar20(props) {
                   disabled={!selectedDate || !selectedTime}
                   className="w-full "
                   variant="outline"
-                  onClick={clickedBookAppointment2}
+                  onClick={clickedBookAppointmentByLogin}
                 >
                   Book Appointment
                 </Button>
@@ -400,6 +458,7 @@ export default function Calendar20(props) {
                   mode="single"
                   selected={selectedDate}
                   onSelect={setSelectedDate}
+                  required
                   defaultMonth={selectedDate}
                   disabled={fetchedBlockedDates}
                   showOutsideDays={true}
@@ -409,6 +468,33 @@ export default function Calendar20(props) {
                       return date.toLocaleString("en-US", {
                         weekday: "short",
                       });
+                    },
+                  }}
+                  components={{
+                    DayButton: ({ children, modifiers, day, ...props }) => {
+                      const isConfirmed =
+                        query.isSuccess &&
+                        query.data.some(
+                          (each) =>
+                            each.status === "CONFIRMED" &&
+                            new Date(each.dtstart).toDateString() ===
+                              day.date.toDateString()
+                        );
+
+                      return (
+                        <CalendarDayButton
+                          day={day}
+                          modifiers={modifiers}
+                          {...props}
+                          className={
+                            isConfirmed
+                              ? "bg-red-500 text-white rounded-full"
+                              : ""
+                          }
+                        >
+                          {children}
+                        </CalendarDayButton>
+                      );
                     },
                   }}
                 />
@@ -488,7 +574,7 @@ export default function Calendar20(props) {
                 disabled={!selectedDate || !selectedTime}
                 className="w-full"
                 variant="outline"
-                onClick={clickedBookAppointment}
+                onClick={clickedBookAppointmentByPublicPage}
               >
                 Book Appointment
               </Button>

@@ -7,7 +7,6 @@ const LogoutPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // localStorage.removeItem("refresh");
     authCtx.setAccess("");
     authCtx.setRole("");
     authCtx.setUsername("");

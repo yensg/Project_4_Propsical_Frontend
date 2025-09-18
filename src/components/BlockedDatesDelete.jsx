@@ -11,10 +11,9 @@ const BlockedDatesDelete = (props) => {
   const fetchData = useFetch();
 
   const dateObj = new Date(props.date);
-
   const formatedDate = dateObj.toLocaleDateString("en-SG", {
     day: "numeric",
-    month: "short", // 👈 gives "Jan", "Feb", etc.
+    month: "short", // gives "Jan", "Feb"
     year: "numeric",
   });
 
@@ -29,7 +28,6 @@ const BlockedDatesDelete = (props) => {
     );
     return true;
   };
-
   const mutate = useMutation({
     mutationFn: deleteBlockedDates,
     onSuccess: () => {

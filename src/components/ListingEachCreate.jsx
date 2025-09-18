@@ -50,21 +50,6 @@ const ListingEachCreate = () => {
     });
   };
 
-  //   const getAccountId = async () => {
-  //     return await fetchData(
-  //       "/api/username",
-  //       "PUT",
-  //       {
-  //         username: authCtx.username,
-  //       },
-  //       authCtx.access
-  //     );
-  //   };
-  //   const query = useQuery({
-  //     queryKey: ["accountId"],
-  //     queryFn: getAccountId,
-  //   });
-
   const createListing = async (payload) => {
     return await fetchData(
       "/api/createListing",
@@ -73,7 +58,6 @@ const ListingEachCreate = () => {
       authCtx.access
     );
   };
-
   const mutate = useMutation({
     mutationFn: (payload) => createListing(payload),
     onSuccess: (data) => {
@@ -93,17 +77,14 @@ const ListingEachCreate = () => {
       navigate(`/newListingUpload/${data.listing_id}`);
     },
   });
-
   const clickedSubmit = () => {
     const hasEmpty = Object.entries(inputs).some(
       ([key, value]) => value === "" || value === null || value === undefined
     );
-
     if (hasEmpty) {
       setError("⚠️ Please fill in all required fields");
       return;
     }
-
     setError("");
 
     const payload = {
