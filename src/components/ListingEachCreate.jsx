@@ -1,8 +1,7 @@
-import React, { use, useEffect, useState } from "react";
+import React, { use, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import AuthCtx from "../context/authCtx";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Card } from "./ui/card";
+import { useMutation } from "@tanstack/react-query";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
