@@ -111,7 +111,6 @@ const ListingEachCreate = () => {
       land_size: inputs.land_size === "" ? null : inputs.land_size,
       account_id: authCtx.account_id, // add it here only when sending
     };
-    console.log(authCtx.account_id);
     mutate.mutate(payload);
   };
 

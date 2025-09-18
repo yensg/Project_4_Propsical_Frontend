@@ -6,7 +6,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { ArrowBigLeft, Image, Popsicle, Send, Trash2 } from "lucide-react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const ListingEachUpdate = () => {
   const fetchData = useFetch();
@@ -39,7 +39,6 @@ const ListingEachUpdate = () => {
     description: "",
   });
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const [error, setError] = useState("");
 
   const getOneListing = async () => {

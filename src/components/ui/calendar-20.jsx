@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from "react";
-
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -14,6 +14,10 @@ export default function Calendar20(props) {
   const fetchData = useFetch();
   const authCtx = use(AuthCtx);
   const queryClient = useQueryClient();
+  const [guestName, setGuestName] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+  const [error, setError] = useState("");
+  const isAuthenticated = Boolean(authCtx.access);
   const [range, setRange] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("10:00");
@@ -136,216 +140,362 @@ export default function Calendar20(props) {
     return await fetchData("/api/calendar", "POST", {
       listing_id: props.listing_id,
       dtstart: formatedDate,
-      summary: authCtx.username,
-      description: "",
+      summary: authCtx.username || guestName,
+      description: guestPhone,
       status: "CONFIRMED",
       timeslot_is_blocked: true,
-      account_id: authCtx.account_id,
+      account_id: authCtx.account_id || null,
       timezone: timeZone,
     });
   };
-
   const mutateAppt = useMutation({
     mutationFn: createAppointment,
     onSuccess: () => {
       queryClient.invalidateQueries(["allAppointments", props.listing_id]);
       setSelectedDate(new Date());
       setSelectedTime("");
+      setGuestName("");
+      setGuestPhone("");
     },
   });
 
+  const clickedBookAppointment = () => {
+    const inputs = { guestName, guestPhone };
+    const hasEmpty = Object.entries(inputs).some(
+      ([, value]) => value === "" || value === null || value === undefined
+    );
+    if (hasEmpty) {
+      setError("⚠️ Please fill in all required fields");
+      return;
+    }
+    setError("");
+
+    mutateAppt.mutate();
+  };
+
+  const clickedBookAppointment2 = () => {
+    if (!guestPhone || guestPhone.trim() === "") {
+      setError("⚠️ Please fill in all required fields");
+      return;
+    }
+    setError("");
+
+    mutateAppt.mutate();
+  };
+
   return (
     <>
-      {/* <div className="flex flex-col items-center gap-4"> */}
-      {props.view === "month" ? (
-        <Card className="gap-0 p-0">
-          <CardContent className="relative p-0">
-            <div className="p-6">
-              <Label className="font-semibold align-baseline">
-                Blocking Mode
-              </Label>
-              <Calendar
-                mode="range"
-                defaultMonth={range?.from}
-                selected={range}
-                onSelect={setRange}
-                disabled={fetchedBlockedDates}
-                numberOfMonths={1}
-                captionLayout="dropdown"
-                className="bg-transparent p-0 [--cell-size:--spacing(11)] md:[--cell-size:--spacing(13)]"
-                formatters={{
-                  formatMonthDropdown: (date) => {
-                    return date.toLocaleString("default", { month: "long" });
-                  },
-                }}
-                // components={{
-                //   DayButton: ({ children, modifiers, day, ...props }) => {
-                //     return (
-                //       <CalendarDayButton
-                //         day={day}
-                //         modifiers={modifiers}
-                //         {...props}
-                //       >
-                //         {children}
+      {isAuthenticated ? (
+        <>
+          {props.view === "month" ? (
+            <Card className="gap-0 p-0">
+              <CardContent className="relative p-0">
+                <div className="p-6">
+                  <Label className="font-semibold align-baseline">
+                    Blocking Mode
+                  </Label>
+                  <Calendar
+                    mode="range"
+                    defaultMonth={range?.from}
+                    selected={range}
+                    onSelect={setRange}
+                    disabled={fetchedBlockedDates}
+                    numberOfMonths={1}
+                    captionLayout="dropdown"
+                    className="bg-transparent p-0 [--cell-size:--spacing(11)] md:[--cell-size:--spacing(13)]"
+                    formatters={{
+                      formatMonthDropdown: (date) => {
+                        return date.toLocaleString("default", {
+                          month: "long",
+                        });
+                      },
+                    }}
+                    // components={{
+                    //   DayButton: ({ children, modifiers, day, ...props }) => {
+                    //     return (
+                    //       <CalendarDayButton
+                    //         day={day}
+                    //         modifiers={modifiers}
+                    //         {...props}
+                    //       >
+                    //         {children}
 
-                //         {!modifiers.outside && (
-                //           <span>{isWeekend ? "$220" : "$100"}</span>
-                //         )}
-                //       </CalendarDayButton>
-                //     );
-                //   },
-                // }}
-              />
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-4 border-t px-6 !py-5 md:flex-row">
-            <div className="text-sm">
-              <>Select dates you want to block.</>
-            </div>
-            <Button
-              // disabled={!selectedDate || !selectedTime}
-              className="w-full md:ml-auto md:w-auto"
-              variant="outline"
-              onClick={mutate.mutate}
-            >
-              Block
-            </Button>
-          </CardFooter>
-          <CardFooter className="flex flex-col gap-1 border-t px-6 !py-5 md:flex-row">
-            <div className="text-sm">
-              <>Select dates you want to unblock.</>
-            </div>
-            <div className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6 md:absolute md:max-h-none md:w-48 md:border-t-0 md:border-l">
-              <div className="flex flex-col items-center gap-2">
-                {query.isSuccess &&
-                  query.data.map((each) => {
-                    return (
-                      <BlockedDatesDelete
-                        date={each.dtstart}
-                        listing_id={props.listing_id}
-                        uid={each.uid}
-                        key={each.uid}
-                      />
-                    );
-                  })}
-              </div>
-            </div>
-          </CardFooter>
-        </Card>
-      ) : (
-        <Card className="gap-0 p-0">
-          <CardContent className="relative p-0 md:pr-48">
-            {JSON.stringify(fetchedBlockedTime)}
-            <div className="p-6">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={setSelectedDate}
-                defaultMonth={selectedDate}
-                disabled={fetchedBlockedDates}
-                showOutsideDays={true}
-                className="bg-transparent p-0 [--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
-                formatters={{
-                  formatWeekdayName: (date) => {
-                    return date.toLocaleString("en-US", {
-                      weekday: "short",
-                    });
-                  },
-                }}
-              />
-            </div>
-            <div className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6 md:absolute md:max-h-none md:w-48 md:border-t-0 md:border-l">
-              <div className="grid gap-2">
-                {timeSlots.map((time) => {
-                  const timeIsBlocked = fetchedBlockedTime
-                    .filter(
-                      (each) =>
-                        normalizeDate(each[0]).getTime() ===
-                        normalizeDate(selectedDate).getTime()
-                    )
-                    .map((each) => {
-                      return each[1];
-                    })
-                    .includes(time);
-                  return (
-                    <Button
-                      key={time}
-                      disabled={timeIsBlocked}
-                      variant={selectedTime === time ? "default" : "outline"}
-                      onClick={() => setSelectedTime(time)}
-                      className={`w-full shadow-none ${
-                        timeIsBlocked ? "opacity-50 line-through" : ""
-                      }`}
-                    >
-                      {time}
-                    </Button>
-                  );
-                })}
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-4 border-t px-6 !py-5 md:flex-row">
-            <div className="text-sm">Time Zone: {timeZone}</div>
-
-            <div className="text-sm">
-              {selectedDate && selectedTime ? (
-                <>
-                  Your meeting is booked for{" "}
-                  <span className="font-medium">
-                    {" "}
-                    {selectedDate?.toLocaleDateString("en-US", {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                    })}{" "}
-                  </span>
-                  at <span className="font-medium">{selectedTime}</span>.
-                </>
-              ) : (
-                <>Select a date and time for your meeting.</>
-              )}
-            </div>
-            <Button
-              disabled={!selectedDate || !selectedTime}
-              className="w-full md:ml-auto md:w-auto"
-              variant="outline"
-              onClick={mutateAppt.mutate}
-            >
-              Continue
-            </Button>
-          </CardFooter>
-          <CardFooter className="flex flex-col gap-1 border-t px-6 !py-5 md:flex-row">
-            <div className="text-sm">
-              <>Select Appointment you want to delete.</>
-            </div>
-            <div className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6 md:absolute md:max-h-none md:w-48 md:border-t-0 md:border-l">
-              <div className="flex flex-col items-center gap-2">
-                {query.isSuccess &&
-                  query.data
-                    .filter((each) => each.timeslot_is_blocked)
-                    .map((each) => {
-                      const date = new Date(each.dtstart);
-                      const time = date.toLocaleTimeString("en-SG", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: false,
-                      });
+                    //         {!modifiers.outside && (
+                    //           <span>{isWeekend ? "$220" : "$100"}</span>
+                    //         )}
+                    //       </CalendarDayButton>
+                    //     );
+                    //   },
+                    // }}
+                  />
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-col gap-4 border-t px-6 !py-5 md:flex-row">
+                <div className="text-sm">
+                  <>Select dates you want to block.</>
+                </div>
+                <Button
+                  // disabled={!selectedDate || !selectedTime}
+                  className="w-full md:ml-auto md:w-auto"
+                  variant="outline"
+                  onClick={mutate.mutate}
+                >
+                  Block
+                </Button>
+              </CardFooter>
+              <CardFooter className="flex flex-col gap-1 border-t px-6 !py-5">
+                <div className="text-sm">
+                  <>Select dates you want to unblock.</>
+                </div>
+                <div className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6 ">
+                  <div className="flex flex-col items-center gap-2">
+                    {query.isSuccess &&
+                      query.data.map((each) => {
+                        return (
+                          <BlockedDatesDelete
+                            date={each.dtstart}
+                            listing_id={props.listing_id}
+                            uid={each.uid}
+                            key={each.uid}
+                          />
+                        );
+                      })}
+                  </div>
+                </div>
+              </CardFooter>
+            </Card>
+          ) : (
+            <Card className="gap-0 p-0">
+              <CardContent className="relative p-0 md:pr-48">
+                <div className="flex justify-center p-6">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={setSelectedDate}
+                    defaultMonth={selectedDate}
+                    disabled={fetchedBlockedDates}
+                    showOutsideDays={true}
+                    className="bg-transparent p-0 [--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
+                    formatters={{
+                      formatWeekdayName: (date) => {
+                        return date.toLocaleString("en-US", {
+                          weekday: "short",
+                        });
+                      },
+                    }}
+                  />
+                </div>
+                <div className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6 md:absolute md:max-h-none md:w-48 md:border-t-0 md:border-l">
+                  <div className="grid gap-2">
+                    {timeSlots.map((time) => {
+                      const timeIsBlocked = fetchedBlockedTime
+                        ?.filter(
+                          (each) =>
+                            normalizeDate(each[0]).getTime() ===
+                            normalizeDate(selectedDate).getTime()
+                        )
+                        .map((each) => {
+                          return each[1];
+                        })
+                        .includes(time);
                       return (
-                        <AppointmentTimeslotsDelete
-                          date={date}
-                          time={time}
-                          listing_id={props.listing_id}
-                          uid={each.uid}
-                          key={each.uid}
-                        />
+                        <Button
+                          key={time}
+                          disabled={timeIsBlocked}
+                          variant={
+                            selectedTime === time ? "default" : "outline"
+                          }
+                          onClick={() => setSelectedTime(time)}
+                          className={`w-full shadow-none ${
+                            timeIsBlocked ? "opacity-50 line-through" : ""
+                          }`}
+                        >
+                          {time}
+                        </Button>
                       );
                     })}
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-col gap-4 border-t px-6 !py-5">
+                {error && <p className="text-red-500 font-semibold">{error}</p>}
+                <div className="text-sm">Time Zone: {timeZone}</div>
+                <div className="text-sm">
+                  {selectedDate && selectedTime ? (
+                    <>
+                      Your meeting is booked for{" "}
+                      <span className="font-medium">
+                        {" "}
+                        {selectedDate?.toLocaleDateString("en-US", {
+                          weekday: "long",
+                          day: "numeric",
+                          month: "long",
+                        })}{" "}
+                      </span>
+                      at <span className="font-medium">{selectedTime}</span>.
+                    </>
+                  ) : (
+                    <>Select a date and time for your meeting.</>
+                  )}
+                </div>
+                <div className="flex flex-row items-center w-full  gap-2">
+                  <Label htmlFor="guestPhone">Name/Phone</Label>
+                  <Input
+                    id="guestPhone"
+                    type="text"
+                    required
+                    value={guestPhone}
+                    onChange={(e) => setGuestPhone(e.target.value)}
+                  />
+                </div>
+                <Button
+                  disabled={!selectedDate || !selectedTime}
+                  className="w-full "
+                  variant="outline"
+                  onClick={clickedBookAppointment2}
+                >
+                  Book Appointment
+                </Button>
+              </CardFooter>
+              <CardFooter className="flex flex-col gap-1 border-t px-6 !py-5 ">
+                <div className="text-sm">
+                  <>Select Appointment you want to delete.</>
+                </div>
+                <div className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6">
+                  <div className="flex flex-col items-center gap-2">
+                    {query.isSuccess &&
+                      query.data
+                        .filter((each) => each.timeslot_is_blocked)
+                        .map((each) => {
+                          const date = new Date(each.dtstart);
+                          const time = date.toLocaleTimeString("en-SG", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          });
+                          return (
+                            <AppointmentTimeslotsDelete
+                              date={date}
+                              time={time}
+                              listing_id={props.listing_id}
+                              uid={each.uid}
+                              key={each.uid}
+                              summary={each.summary}
+                              description={each.description}
+                            />
+                          );
+                        })}
+                  </div>
+                </div>
+              </CardFooter>
+            </Card>
+          )}
+        </>
+      ) : (
+        <>
+          <Card className="gap-0 p-0">
+            <CardContent className="relative p-0 md:pr-48">
+              <div className="flex justify-center p-6">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                  defaultMonth={selectedDate}
+                  disabled={fetchedBlockedDates}
+                  showOutsideDays={true}
+                  className="bg-transparent p-0 [--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
+                  formatters={{
+                    formatWeekdayName: (date) => {
+                      return date.toLocaleString("en-US", {
+                        weekday: "short",
+                      });
+                    },
+                  }}
+                />
               </div>
-            </div>
-          </CardFooter>
-        </Card>
+              <div className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6 md:absolute md:max-h-none md:w-48 md:border-t-0 md:border-l">
+                <div className="grid gap-2">
+                  {timeSlots.map((time) => {
+                    const timeIsBlocked = fetchedBlockedTime
+                      ?.filter(
+                        (each) =>
+                          normalizeDate(each[0]).getTime() ===
+                          normalizeDate(selectedDate).getTime()
+                      )
+                      .map((each) => {
+                        return each[1];
+                      })
+                      .includes(time);
+                    return (
+                      <Button
+                        key={time}
+                        disabled={timeIsBlocked}
+                        variant={selectedTime === time ? "default" : "outline"}
+                        onClick={() => setSelectedTime(time)}
+                        className={`w-full shadow-none ${
+                          timeIsBlocked ? "opacity-50 line-through" : ""
+                        }`}
+                      >
+                        {time}
+                      </Button>
+                    );
+                  })}
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4 border-t px-6 !py-5 ">
+              {error && <p className="text-red-500 font-semibold">{error}</p>}
+              <div className="text-sm">Time Zone: {timeZone}</div>
+              <div className="text-sm">
+                {selectedDate && selectedTime ? (
+                  <>
+                    Your meeting is booked for{" "}
+                    <span className="font-medium">
+                      {" "}
+                      {selectedDate?.toLocaleDateString("en-US", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                      })}{" "}
+                    </span>
+                    at <span className="font-medium">{selectedTime}</span>.
+                  </>
+                ) : (
+                  <>Select a date and time for your meeting.</>
+                )}
+              </div>
+              <div className="flex flex-row items-center w-full gap-2">
+                <Label htmlFor="guestName">Name</Label>
+                <Input
+                  id="guestName"
+                  type="text"
+                  required
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-row items-center w-full gap-2">
+                <Label htmlFor="guestPhone">Phone</Label>
+                <Input
+                  id="guestPhone"
+                  type="text"
+                  required
+                  value={guestPhone}
+                  onChange={(e) => setGuestPhone(e.target.value)}
+                />
+              </div>
+              <Button
+                disabled={!selectedDate || !selectedTime}
+                className="w-full"
+                variant="outline"
+                onClick={clickedBookAppointment}
+              >
+                Book Appointment
+              </Button>
+            </CardFooter>
+          </Card>
+        </>
       )}
-      {/* </div> */}
     </>
   );
 }

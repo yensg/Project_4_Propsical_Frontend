@@ -40,6 +40,8 @@ const AppointmentTimeslotsDelete = (props) => {
   return (
     <>
       <div className="flex flex-row items-center gap-2">
+        <div>{props.summary}</div>
+        <div>{props.description}</div>
         <div>{formatedDate}</div>
         <div>{props.time}</div>
         <Button variant="destructive" onClick={mutate.mutate}>
