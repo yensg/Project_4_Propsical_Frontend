@@ -244,6 +244,33 @@ export default function Calendar20(props) {
                         });
                       },
                     }}
+                    components={{
+                      DayButton: ({ children, modifiers, day, ...props }) => {
+                        const isConfirmed =
+                          query.isSuccess &&
+                          query.data.some(
+                            (each) =>
+                              each.status === "CONFIRMED" &&
+                              new Date(each.dtstart).toDateString() ===
+                                day.date.toDateString()
+                          );
+
+                        return (
+                          <CalendarDayButton
+                            day={day}
+                            modifiers={modifiers}
+                            {...props}
+                            className={
+                              isConfirmed
+                                ? "bg-red-500 text-white rounded-full"
+                                : ""
+                            }
+                          >
+                            {children}
+                          </CalendarDayButton>
+                        );
+                      },
+                    }}
                   />
                 </div>
               </CardContent>
@@ -267,16 +294,18 @@ export default function Calendar20(props) {
                 <div className="no-scrollbar inset-y-0 right-0 flex max-h-72 w-full scroll-pb-6 flex-col gap-4 overflow-y-auto border-t p-6 ">
                   <div className="flex flex-col items-center gap-2">
                     {query.isSuccess &&
-                      query.data.map((each) => {
-                        return (
-                          <BlockedDatesDelete
-                            date={each.dtstart}
-                            listing_id={props.listing_id}
-                            uid={each.uid}
-                            key={each.uid}
-                          />
-                        );
-                      })}
+                      query.data
+                        .filter((each) => each.date_is_blocked)
+                        .map((each) => {
+                          return (
+                            <BlockedDatesDelete
+                              date={each.dtstart}
+                              listing_id={props.listing_id}
+                              uid={each.uid}
+                              key={each.uid}
+                            />
+                          );
+                        })}
                   </div>
                 </div>
               </CardFooter>

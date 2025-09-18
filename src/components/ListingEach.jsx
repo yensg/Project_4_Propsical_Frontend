@@ -100,9 +100,9 @@ const ListingEach = (props) => {
           {!isAuthenticated ? (
             <div className="flex w-full flex-col md:flex-row items-start gap-2 md:justify-between">
               <div className="flex flex-col md:flex-row md:items-center gap-2">
-                <div className="shrink-0 w-10 text-center text-lg font-semibold">
+                {/* <div className="shrink-0 w-10 text-center text-lg font-semibold">
                   <span>{props.children + 1}</span>
-                </div>
+                </div> */}
                 {queryImages.isSuccess && queryImages.data.length > 0 && (
                   <img
                     src={queryImages.data[0].image}
@@ -183,9 +183,9 @@ const ListingEach = (props) => {
             <div>
               <div className="flex w-full flex-col md:flex-row items-start gap-2 md:justify-between">
                 <div className="flex flex-col md:flex-row md:items-center gap-2">
-                  <div className="shrink-0 w-10 text-center text-lg font-semibold">
+                  {/* <div className="shrink-0 w-10 text-center text-lg font-semibold">
                     <span>{props.children + 1}</span>
-                  </div>
+                  </div> */}
                   {queryImages.isSuccess && queryImages.data.length > 0 && (
                     <img
                       src={queryImages.data[0].image}
