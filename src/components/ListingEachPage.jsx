@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowBigLeft, Phone, Popsicle, User } from "lucide-react";
+import { ArrowBigLeft, Calendar, Phone, Popsicle, User } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -68,6 +68,10 @@ const ListingEachPage = () => {
     queryKey: ["usernames", params.id],
     queryFn: findUsername,
   });
+
+  const clickedAppointments = () => {
+    navigate(`/calendar/${params.id}`);
+  };
 
   return (
     <>
@@ -179,9 +183,15 @@ const ListingEachPage = () => {
           </>
         )}
       </div>
-      <Button onClick={() => navigate(-1)}>
-        <ArrowBigLeft /> Back
-      </Button>
+      <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
+        <Button onClick={() => navigate(-1)}>
+          <ArrowBigLeft /> Back
+        </Button>
+        <Button variant="outline" onClick={clickedAppointments}>
+          <Calendar />
+          Appointments
+        </Button>
+      </div>
     </>
   );
 };

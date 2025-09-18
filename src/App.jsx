@@ -53,7 +53,7 @@ function App() {
               viewport={false}
               className="!w-full !max-w-none flex-1 md:flex-none md:!w-auto md:!justify-start"
             >
-              <NavigationMenuList className="grid w-full grid-cols-3 justify-items-center md:flex md:w-auto md:justify-start md:gap-4 !space-x-0 p-0 m-0">
+              <NavigationMenuList className="grid w-full grid-cols-2 justify-items-center md:flex md:w-auto md:justify-start md:gap-4 !space-x-0 p-0 m-0">
                 {/* <NavigationMenuList className="flex w-full justify-evenly items-center md:flex md:w-auto md:justify-start md:gap-4 !space-x-0 p-0 m-0"> */}
                 {!isAuthenticated ? (
                   <NavigationMenuItem>
@@ -84,19 +84,19 @@ function App() {
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 )}
-                <NavigationMenuItem>
+                {/* <NavigationMenuItem>
                   <NavigationMenuLink
                     asChild
                     className="block px-3 py-2 hover:bg-accent rounded-md"
                   >
-                    <Link to="/calendar">
+                    <Link to="/calendar/:id">
                       <CalendarDays
                         className="!w-8 !h-8 text-black"
                         strokeWidth={1.4}
                       />
                     </Link>
                   </NavigationMenuLink>
-                </NavigationMenuItem>
+                </NavigationMenuItem> */}
 
                 {!isAuthenticated ? (
                   <NavigationMenuItem>
@@ -136,7 +136,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/" element={<LoginPage />} />
               <Route path="/main" element={<ListingPublicPage />} />
-              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/calendar/:id" element={<Calendar />} />
               <Route
                 path="/newListingUpload/:id"
                 element={

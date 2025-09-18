@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   ArchiveX,
   BedDouble,
+  Calendar,
   CircleDollarSign,
   Eye,
   MapPin,
@@ -52,6 +53,10 @@ const ListingEach = (props) => {
     navigate(`/updateListing/${props.listing_id}`);
   };
 
+  const clickedAppointments = () => {
+    navigate(`/calendar/${props.listing_id}`);
+  };
+
   const findImages = async () => {
     const res = await fetch(`${import.meta.env.VITE_SERVER}/api/findImages`, {
       method: "POST",
@@ -93,19 +98,19 @@ const ListingEach = (props) => {
       <div className="px-4 md:px-12 gap-2">
         <Card className="w-full p-4">
           {!isAuthenticated ? (
-            <Link to={`/listings/${props.listing_id}`}>
-              <div className="flex w-full flex-col md:flex-row items-start gap-2">
-                <div className="flex flex-col md:flex-row md: items-center items-left gap-2">
-                  <div className="shrink-0 w-10 text-center text-lg font-semibold">
-                    <span>{props.children + 1}</span>
-                  </div>
-                  {queryImages.isSuccess && queryImages.data.length > 0 && (
-                    <img
-                      src={queryImages.data[0].image}
-                      alt={props.children + 1}
-                      className="shrink-0 rounded-md object-cover w-64 h-56"
-                    />
-                  )}
+            <div className="flex w-full flex-col md:flex-row items-start gap-2">
+              <div className="flex flex-col md:flex-row md: items-center items-left gap-2">
+                <div className="shrink-0 w-10 text-center text-lg font-semibold">
+                  <span>{props.children + 1}</span>
+                </div>
+                {queryImages.isSuccess && queryImages.data.length > 0 && (
+                  <img
+                    src={queryImages.data[0].image}
+                    alt={props.children + 1}
+                    className="shrink-0 rounded-md object-cover w-64 h-56"
+                  />
+                )}
+                <Link to={`/listings/${props.listing_id}`}>
                   <div className="flex flex-col items-center gap-2">
                     <div className="flex w-full flex-wrap gap-2">
                       <Badge variant="destructive">
@@ -165,31 +170,15 @@ const ListingEach = (props) => {
                       )}
                     </div>
                   </div>
-                  {isAuthenticated ? (
-                    <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
-                      <Button variant="outline" onClick={clickedView}>
-                        <Eye />
-                        View
-                      </Button>
-                      <Button variant="outline" onClick={clickedUpdate}>
-                        <PencilLine />
-                        Update
-                      </Button>
-                      {/* <Button variant="secondary">
-                        <ArchiveX />
-                        Completed
-                      </Button> */}
-                      <Button variant="destructive" onClick={mutate.mutate}>
-                        <Trash2 />
-                        Delete
-                      </Button>
-                    </div>
-                  ) : (
-                    ""
-                  )}
+                </Link>
+                <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
+                  <Button variant="outline" onClick={clickedAppointments}>
+                    <Calendar />
+                    Appointments
+                  </Button>
                 </div>
               </div>
-            </Link>
+            </div>
           ) : (
             <div>
               <div className="flex w-full flex-col md:flex-row items-start gap-2">
@@ -247,28 +236,27 @@ const ListingEach = (props) => {
                       </div>
                     </div>
                   </div>
-                  {isAuthenticated ? (
-                    <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
-                      <Button variant="outline" onClick={clickedView}>
-                        <Eye />
-                        View
+
+                  <div className="flex flex-wrap gap-2 w-full md:w-auto md:ml-auto md:items-center md:mt-0">
+                    <Button variant="outline" onClick={clickedView}>
+                      <Eye />
+                      View
+                    </Button>
+                    <Button variant="outline" onClick={clickedUpdate}>
+                      <PencilLine />
+                      Update
+                    </Button>
+                    <Link to={`/calendar/${props.listing_id}`}>
+                      <Button variant="outline">
+                        <Calendar />
+                        Appointments
                       </Button>
-                      <Button variant="outline" onClick={clickedUpdate}>
-                        <PencilLine />
-                        Update
-                      </Button>
-                      {/* <Button variant="secondary">
-                        <ArchiveX />
-                        Completed
-                      </Button> */}
-                      <Button variant="destructive" onClick={mutate.mutate}>
-                        <Trash2 />
-                        Delete
-                      </Button>
-                    </div>
-                  ) : (
-                    ""
-                  )}
+                    </Link>
+                    <Button variant="destructive" onClick={mutate.mutate}>
+                      <Trash2 />
+                      Delete
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
