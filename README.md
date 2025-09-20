@@ -1,6 +1,6 @@
 <img src="./src/assets/Propsical_logo.png" alt="Propsical_logo" width="100"/>
 
-## Introduction:
+# Introduction:
 
     - Propsical is real estate marketplace website that also provides appointment management system.
     - This is to solve the hassle of managing appointments while buyer looking and viewing multiple properties, and seller to schedule buyers to view at their schedule.
@@ -107,3 +107,29 @@ CLOUDINARY_API_KEY="type_API_key_here"
 CLOUDINARY_API_SECRET="type_your_secret_key_here"
 CLOUDINARY_UPLOAD_FOLDER=propsical/listings
 ```
+
+## Tech Stack
+
+1. Frontend (client-side)
+   - React, Javascript, HTML, CSS, Shadcn
+2. Backend (server-side)
+   - Flask, Python
+3. Database
+   - Supabase, Cloudinary
+
+# Planning Stage
+
+## User Story
+
+- First, write out user story to understand what's the user experiencing when interacting with the application.
+
+  - As a Guest user, I want to Create an appointment on the Subscribed user's calendar for the particular listed unit and contact the subscribed user directly.
+  - As a Registered user, I want to CRUD my own appointments on the targeted Subscribed user's calendar for the particular listed unit and contact the subscribed user directly.
+  - As a Registered user, I want to CRUD on my own calendar
+  - As a Registered user, I want to CRUD on my own listing details and images
+  - As a Registered user, I want to able to click on that appointment to contact the buyer directly.
+
+## App Hierarchy
+
+src/assets/app_hierarchy.png
+<img src="./src/assets/app_hierarchy.png" alt="app_hierarchy" width="500"/>
