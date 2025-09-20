@@ -11,29 +11,32 @@
 
 <img src="./src/assets/first_page.png" alt="first_page" width="300"/>
 
-- it shows the login page with 2 icons at the navigation bar:
   <img src="./src/assets/before_login.png" alt="before_login" width="100"/>
 
+- it shows the login page with 2 icons at the navigation bar:
   - Home icon: this is explore all public listings created by the app as a guest user (without login)
   - Login icon: this is to login as an registered user
 
+<img src="./src/assets/after_login.png" alt="after_login" width="100"/>
+
 - After login, you will see both icons changed:
-  <img src="./src/assets/after_login.png" alt="after_login" width="100"/>
   - Listings icon: this is where registered user able to see own created listings
   - Logout icon: this is to logout as an registered user
 
 ### As guest user:
 
-- When one is exploring the public listing page, can inspect one of the listings:
+<img src="./src/assets/guest_user_main_page.png" alt="guest_user_main_page" width="300"/>
 
-  - One is able to click on the listing and be directed to another dedicated page with all the details just for the listing.
-  - One is able to click on the `Appointment` and be directed to the appointment booking page.
+- When user is exploring the public listing page, can inspect one of the listings:
 
-    - Then one can select the date and timing, and followed by inputting name and phone number before proceeding to click `Book Appointment`
+  - User is able to click on the listing and be directed to another dedicated page with all the details just for the listing.
+  - User is able to click on the `Appointment` and be directed to the appointment booking page.
+  - Then User can select the date and timing, and followed by inputting name and phone number before proceeding to click `Book Appointment`
 
+<img src="./src/assets/registration.png" alt="registration" width="300"/>
 - Registering as a new registered user:
 
-  - One simply just fill up username, password, name and phone number before clicking `Submit`
+- One simply just fill up username, password, name and phone number before clicking `Submit`
 
 ### As a registered user:
 
