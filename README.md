@@ -119,6 +119,16 @@ CLOUDINARY_UPLOAD_FOLDER=propsical/listings
 
 # Planning Stage
 
+- Step 1: to write up the user story with as many features and ideas as possible with a business solving mentality.
+  - Why people would want to use mine?
+  - What kind of problem it can solve?
+  - What value it can bring about?
+- Step 2: to design the database with as much information required to solve these problems
+- Step 3: to layout the App hierarchy on how the user will experience
+- Step 4: start coding for base structure of the databases
+- Step 5: create frontend to interface with back and and also to expand database if needed
+- Step 6: repeat 4 & 5 to improve the overall app creation
+
 ## User Story
 
 - First, write out user story to understand what's the user experiencing when interacting with the application.
@@ -131,5 +141,17 @@ CLOUDINARY_UPLOAD_FOLDER=propsical/listings
 
 ## App Hierarchy
 
-src/assets/app_hierarchy.png
-<img src="./src/assets/app_hierarchy.png" alt="app_hierarchy" width="500"/>
+<img src="./src/assets/app_hierarchy.png" alt="app_hierarchy" width="700"/>
+
+## Database Design (ERD)
+
+<img src="./src/assets/database_design.png" alt="database_design" width="700"/>
+
+## Planned future enhancements (stretch goals)
+
+- To add an exporting function for appointments as an iCal
+- To able to click on the appointment and direct to googleMap on how to go
+
+# Thank you
+
+- Thank you for taking the time to experience with this Propsical and please feel free to contact me at yen.compound@gmail.com!
