@@ -1,3 +1,4 @@
+<img src=".src/assets/Propsical_logo.png" alt="propsical_logo" width="100"/>
 <img src=".src/assets/Propsical_logo.png" alt="Propsical_logo" width="100"/>
 
 ## Introduction:
@@ -37,7 +38,7 @@
 
 ### As a registered user:
 
-<img src=".src/assets/registered_user_main_page.png alt="registered_user_main_page" width="300"/>
+<img src=".src/assets/registered_user_main_page.png" alt="registered_user_main_page" width="300"/>
 
 - Type username and password before clicking `Login`
 - Upon logging in, it will show all listings that previous created by the user.
