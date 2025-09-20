@@ -9,12 +9,16 @@
 
 ### Upon first visiting page
 
+![first_page](src/assets/first_page.png)
+
 - it shows the login page with 2 icons at the navigation bar:
+  ![before_login](src/assets/before_login.png)
 
   - Home icon: this is explore all public listings created by the app as a guest user (without login)
   - Login icon: this is to login as an registered user
 
 - After login, you will see both icons changed:
+  ![before_login](src/assets/after_login.png)
   - Listings icon: this is where registered user able to see own created listings
   - Logout icon: this is to logout as an registered user
 
@@ -32,6 +36,8 @@
   - One simply just fill up username, password, name and phone number before clicking `Submit`
 
 ### As a registered user:
+
+![registered_user_main_page](src/assets/registered_user_main_page.png)
 
 - Type username and password before clicking `Login`
 - Upon logging in, it will show all listings that previous created by the user.
