@@ -129,9 +129,9 @@ CLOUDINARY_UPLOAD_FOLDER=propsical/listings
 - Step 5: create frontend to interface with back and and also to expand database if needed
 - Step 6: repeat 4 & 5 to improve the overall app creation
 
-## User Story
+## Step 1: User Story
 
-- First, write out user story to understand what's the user experiencing when interacting with the application.
+- Write out user story to understand what's the user experiencing when interacting with the application.
 
   - As a Guest user, I want to Create an appointment on the Subscribed user's calendar for the particular listed unit and contact the subscribed user directly.
   - As a Registered user, I want to CRUD my own appointments on the targeted Subscribed user's calendar for the particular listed unit and contact the subscribed user directly.
@@ -139,13 +139,13 @@ CLOUDINARY_UPLOAD_FOLDER=propsical/listings
   - As a Registered user, I want to CRUD on my own listing details and images
   - As a Registered user, I want to able to click on that appointment to contact the buyer directly.
 
-## App Hierarchy
-
-<img src="./src/assets/app_hierarchy.png" alt="app_hierarchy" width="700"/>
-
-## Database Design (ERD)
+## Step 2: Database Design (ERD)
 
 <img src="./src/assets/database_design.png" alt="database_design" width="700"/>
+
+## Step 3: App Hierarchy
+
+<img src="./src/assets/app_hierarchy.png" alt="app_hierarchy" width="700"/>
 
 ## Planned future enhancements (stretch goals)
 
