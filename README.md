@@ -60,7 +60,7 @@
 
 #### Manipulating existing created listings:
 
-<img src="./" alt="registered_user_main_page" width="300"/>
+<img src="./src/assets/registered_user_buttons.png" alt="registered_user_buttons" width="300"/>
 
 - The user can click on the listings icon at the navigation bar.
 - There are 4 buttons:
