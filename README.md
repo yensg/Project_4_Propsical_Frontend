@@ -19,7 +19,7 @@
 
 - After login, you will see both icons changed:
   ![before_login](src/assets/after_login.png)
-  <img src="./src/assets/after_login.png" alt="before_login" width="400"/>
+  <img src="./src/assets/after_login.png" alt="before_login" width="200"/>
   - Listings icon: this is where registered user able to see own created listings
   - Logout icon: this is to logout as an registered user
 
