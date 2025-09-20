@@ -34,9 +34,9 @@
   - Then User can select the date and timing, and followed by inputting name and phone number before proceeding to click `Book Appointment`
 
 <img src="./src/assets/registration.png" alt="registration" width="300"/>
-- Registering as a new registered user:
 
-- One simply just fill up username, password, name and phone number before clicking `Submit`
+- Registering as a new registered user:
+  - One simply just fill up username, password, name and phone number before clicking `Submit`
 
 ### As a registered user:
 
@@ -91,3 +91,19 @@
 
 - `Month`: user can select the range of dates to be blocked so that guest user cannot book appointments on those dates
   - And registered user can also unblock by deleting the blocked dates.
+
+## Setting up the .env at the backend
+
+```
+DB="type_your_DB_here"
+DB_HOST="type_your_DB_host_here"
+DB_PASSWORD="type_your_password_here"
+DB_PORT=5432
+DB_USER="type_your_username_here"
+JWT_SECRET_KEY="type_your_secret_key_here"
+
+CLOUDINARY_CLOUD_NAME="type_username_here"
+CLOUDINARY_API_KEY="type_API_key_here"
+CLOUDINARY_API_SECRET="type_your_secret_key_here"
+CLOUDINARY_UPLOAD_FOLDER=propsical/listings
+```
