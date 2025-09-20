@@ -5,6 +5,9 @@
 - Propsical is real estate marketplace website that also provides appointment management system.
 - This is to solve the hassle of managing appointments while buyer looking and viewing multiple properties, and seller to schedule buyers to view at their schedule.
 
+- [Frontend github link](https://github.com/yensg/Project_4_Propsical_Frontend)
+- [Backend github link](https://github.com/yensg/Project_4_Propsical_Backend)
+
 ## Getting started:
 
 ### Upon first visiting page
