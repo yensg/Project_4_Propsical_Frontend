@@ -1,8 +1,8 @@
-<img src=".src/assets/Propsical_logo.png" alt="propsical_logo" width="100"/>
 <img src=".src/assets/Propsical_logo.png" alt="Propsical_logo" width="100"/>
 
 ## Introduction:
 
+<img src=".src/assets/Propsical_logo.png" alt="propsical_logo" width="100"/>
     - Propsical is real estate marketplace website that also provides appointment management system.
     - This is to solve the hassle of managing appointments while buyer looking and viewing multiple properties, and seller to schedule buyers to view at their schedule.
 
