@@ -10,6 +10,7 @@
 ### Upon first visiting page
 
 ![first_page](src/assets/first_page.png)
+<img src="./src/assets/first_page.png" alt="first_page" width="200"/>
 
 - it shows the login page with 2 icons at the navigation bar:
   ![before_login](src/assets/before_login.png)
