@@ -48,24 +48,46 @@
 
 #### Creating new listings:
 
+<img src="./src/assets/create_new_listings.png" alt="create_new_listings" width="300"/>
+
 - Fill in all the information as shown and once clicked 'Submit', it will direct the user to the picture uploading page.
+
+<img src="./src/assets/upload_image.png" alt="upload_image" width="300"/>
+
 - Click on the `choose file` to select the file to be uploaded before clicking `Upload`
 - The new image once uploaded will be shown below the `Upload`
 - The user can delete any uploaded images by clicking on the trash icon
 
 #### Manipulating existing created listings:
 
+<img src="./" alt="registered_user_main_page" width="300"/>
+
 - The user can click on the listings icon at the navigation bar.
 - There are 4 buttons:
+
   - `View` to be directed to the dedicated page with all the details just for the listing
   - `Update` to be directed to the editing page
+
+    <img src="./src/assets/update_listings.png" alt="update_listings" width="300"/>
+
+    - To update the details and also able to re-upload the images
+
   - `Appointment` to be directed to the appointment booking and blocking page
   - `Delete` to delete the listing directly
 
 #### Manipulating appointments booking & blocking:
 
 - There are 2 calendar modes which is `Month` and `Day`:
+
+  <img src="./src/assets/calendar_day.png" alt="calendar_day" width="300"/>
+
   - `Day`: user can choose the date & timeslot to block or book appointment by filling in some description
+
+    <img src="./src/assets/calendar_day_selection.png" alt="calendar_day_selection" width="300"/>
+
     - And registered user can also unblock by deleting the blocked timeslots.
-  - `Month`: user can select the range of dates to be blocked so that guest user cannot book appointments on those dates
-    - And registered user can also unblock by deleting the blocked dates.
+
+<img src="./src/assets/calendar_month.png" alt="calendar_month" width="300"/>
+
+- `Month`: user can select the range of dates to be blocked so that guest user cannot book appointments on those dates
+  - And registered user can also unblock by deleting the blocked dates.
