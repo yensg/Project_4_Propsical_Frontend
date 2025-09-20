@@ -1,12 +1,62 @@
-# React + Vite
+![Propsical_logo](src/assets/Propsical_logo.png)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction:
 
-Currently, two official plugins are available:
+    - Propsical is real estate marketplace website that also provides appointment management system.
+    - This is to solve the hassle of managing appointments while buyer looking and viewing multiple properties, and seller to schedule buyers to view at their schedule.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting started:
 
-## Expanding the ESLint configuration
+### Upon first visiting page
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- it shows the login page with 2 icons at the navigation bar:
+
+  - Home icon: this is explore all public listings created by the app as a guest user (without login)
+  - Login icon: this is to login as an registered user
+
+- After login, you will see both icons changed:
+  - Listings icon: this is where registered user able to see own created listings
+  - Logout icon: this is to logout as an registered user
+
+### As guest user:
+
+- When one is exploring the public listing page, can inspect one of the listings:
+
+  - One is able to click on the listing and be directed to another dedicated page with all the details just for the listing.
+  - One is able to click on the `Appointment` and be directed to the appointment booking page.
+
+    - Then one can select the date and timing, and followed by inputting name and phone number before proceeding to click `Book Appointment`
+
+- Registering as a new registered user:
+
+  - One simply just fill up username, password, name and phone number before clicking `Submit`
+
+### As a registered user:
+
+- Type username and password before clicking `Login`
+- Upon logging in, it will show all listings that previous created by the user.
+- The user can click on `New Listing` to create.
+
+#### Creating new listings:
+
+- Fill in all the information as shown and once clicked 'Submit', it will direct the user to the picture uploading page.
+- Click on the `choose file` to select the file to be uploaded before clicking `Upload`
+- The new image once uploaded will be shown below the `Upload`
+- The user can delete any uploaded images by clicking on the trash icon
+
+#### Manipulating existing created listings:
+
+- The user can click on the listings icon at the navigation bar.
+- There are 4 buttons:
+  - `View` to be directed to the dedicated page with all the details just for the listing
+  - `Update` to be directed to the editing page
+  - `Appointment` to be directed to the appointment booking and blocking page
+  - `Delete` to delete the listing directly
+
+#### Manipulating appointments booking & blocking:
+
+- There are 2 calendar modes which is `Month` and `Day`:
+  - `Day`: user can choose the date & timeslot to block or book appointment by filling in some description
+    - And registered user can also unblock by deleting the blocked timeslots.
+  - `Month`: user can select the range of dates to be blocked so that guest user cannot book appointments on those dates
+    - And registered user can also unblock by deleting the blocked dates.
