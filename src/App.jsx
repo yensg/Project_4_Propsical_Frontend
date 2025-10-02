@@ -8,7 +8,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import Calendar from "./components/Calendar";
 import ListingSummary from "./components/ListingSummary";
 import LoginPage from "./components/LoginPage";
@@ -172,7 +172,7 @@ function App() {
               />
               <Route path="/registration" element={<RegistrationPage />} />
               <Route path="/logout" element={<LogoutPage />} />
-              <Route path="*" element={<Navigate to="/login" replace />} />
+              {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
             </Routes>
           </main>
         </QueryClientProvider>
