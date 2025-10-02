@@ -1,5 +1,5 @@
 import React, { use } from "react";
-import AuthCtx from "../context/AuthCtx";
+import AuthCtx from "../context/authCtx";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = (props) => {
